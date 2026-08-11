@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Uso - Gerador de Holerites</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Fontes do Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            height: auto !important;
+            min-height: 100% !important;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+        }
+
+        body {
+            background-color: var(--bg-app);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .guide-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .guide-header {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .guide-title h1 {
+            color: var(--primary-navy);
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .guide-title p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .btn-back {
+            background-color: var(--primary-navy);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition-all);
+        }
+
+        .btn-back:hover {
+            background-color: #001c37;
+            transform: translateY(-1px);
+        }
+
+        .guide-section {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .guide-section h2 {
+            color: var(--primary-navy);
+            font-size: 1.3rem;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid var(--bg-app);
+            padding-bottom: 10px;
+        }
+
+        .badge-step {
+            background-color: var(--accent-color);
+            color: #ffffff;
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .guide-section p {
+            color: var(--text-primary);
+            margin-bottom: 14px;
+        }
+
+        .guide-list {
+            list-style: none;
+            padding: 0;
+            margin: 16px 0;
+        }
+
+        .guide-list li {
+            position: relative;
+            padding-left: 28px;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .guide-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .info-box {
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-left: 4px solid var(--accent-color);
+            padding: 16px;
+            border-radius: 8px;
+            color: #166534;
+            margin: 16px 0;
+            font-size: 0.95rem;
+        }
+
+        .info-box-blue {
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-left: 4px solid var(--primary-navy);
+            padding: 16px;
+            border-radius: 8px;
+            color: #1e40af;
+            margin: 16px 0;
+            font-size: 0.95rem;
+        }
+
+        .guide-footer {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="guide-container">
+        <!-- Header da Guia -->
+        <header class="guide-header">
+            <div class="guide-title">
+                <h1>Guia de Uso do Gerador de Holerites</h1>
+                <p>Aprenda a utilizar todos os recursos e funcionalidades do sistema</p>
+            </div>
+            <a href="index.html" class="btn-back">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Voltar ao Sistema
+            </a>
+        </header>
+
+        <!-- Passo 1: Preenchimento Manual -->
+        <section class="guide-section">
+            <h2><span class="badge-step">Passo 1</span> Preenchimento Manual dos Dados</h2>
+            <p>O sistema inicia com todos os campos limpos para que você possa preencher manualmente de acordo com a sua
+                necessidade:</p>
+            <ul class="guide-list">
+                <li><strong>Período (Mês e Ano):</strong> Selecione o mês no menu suspenso e digite qualquer ano
+                    desejado.</li>
+                <li><strong>Dados da Empresa:</strong> Informe Razão Social, Endereço, CNPJ e o Código da Empresa.</li>
+                <li><strong>Dados do Funcionário:</strong> Informe Código, Nome Completo, Cargo, PIS, CPF, Setor, Seção
+                    e F.I.</li>
+                <li><strong>Valores Fiscais e Banco:</strong> Digite o Salário Base (R$), Referência de Dias,
+                    Adiantamento Salarial e Outros Descontos.</li>
+            </ul>
+        </section>
+
+        <!-- Passo 2: Cálculos Automáticos de INSS e IRRF -->
+        <section class="guide-section">
+            <h2><span class="badge-step">Passo 2</span> Cálculos de INSS e IRRF (Tabela 2025/2026)</h2>
+            <p>Por padrão, a opção de cálculo automático vem ativada:</p>
+            <ul class="guide-list">
+                <li><strong>INSS Progressivo:</strong> O desconto é calculado automaticamente pelas faixas oficiais
+                    progressivas da previdência social.</li>
+                <li><strong>IRRF Progressivo:</strong> O cálculo da retenção do Imposto de Renda considera a dedução do
+                    INSS e a tabela oficial.</li>
+            </ul>
+            <div class="info-box-blue">
+                💡 <strong>Preenchimento Manual de Impostos:</strong> Se desejar informar os valores de INSS e IRRF
+                manualmente, desmarque a caixa <em>"Calcular INSS e IRRF automaticamente"</em> no painel de
+                configurações.
+            </div>
+        </section>
+
+        <!-- Passo 3: Importação de Planilha em Lote -->
+        <section class="guide-section">
+            <h2><span class="badge-step">Passo 3</span> Importação por Planilha Excel (.xlsx) ou CSV</h2>
+            <p>O recurso de importação permite gerar holerites individuais para dezenas ou centenas de funcionários de
+                uma só vez a partir de um único arquivo do Excel (<code>.xlsx</code> / <code>.xls</code>) ou
+                <code>.csv</code>.</p>
+
+            <h3>1. Como Baixar e Preencher o Modelo</h3>
+            <p>Clique no botão <strong>"Baixar Modelo (.csv)"</strong> na barra lateral do sistema para obter a planilha
+                padrão preenchida com os cabeçalhos das colunas exigidos.</p>
+
+            <h3>2. Estrutura e Cabeçalhos das Colunas Aceitas</h3>
+            <p>Sua planilha pode conter as seguintes colunas (a ordem das colunas não importa):</p>
+
+            <table style="width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem;">
+                <thead>
+                    <tr style="background-color: var(--primary-navy); color: #ffffff;">
+                        <th style="padding: 10px; border: 1px solid var(--border-color); text-align: left;">Coluna</th>
+                        <th style="padding: 10px; border: 1px solid var(--border-color); text-align: left;">Descrição
+                        </th>
+                        <th style="padding: 10px; border: 1px solid var(--border-color); text-align: left;">Exemplo de
+                            Valor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);"><code>RazaoSocial</code></td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">Razão Social / Nome da Empresa
+                        </td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">Empresa Exemplo LTDA</td>
+                    </tr>
+                    <tr style="background-color: var(--bg-app);">
+                        <td style="padding: 8px; border: 1px solid var(--border-color);"><code>Endereco</code></td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">Endereço da Empresa</td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">Av. Brasil, 1000</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);"><code>CNPJ</code></td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">CNPJ Formatado</td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">00.000.000/0001-00</td>
+                    </tr>
+                    <tr style="background-color: var(--bg-app);">
+                        <td style="padding: 8px; border: 1px solid var(--border-color);"><code>CodigoEmpresa</code></td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">Código da Empresa</td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">101</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);"><code>CodigoFuncionario</code>
+                        </td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">Código / Matrícula do
+                            Trabalhador</td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">1</td>
+                    </tr>
+                    <tr style="background-color: var(--bg-app);">
+                        <td style="padding: 8px; border: 1px solid var(--border-color);"><code>NomeFuncionario</code>
+                        </td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">Nome Completo do Funcionário
+                        </td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">João da Silva</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);"><code>Cargo</code></td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">Cargo ou Função</td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">Analista de Sistemas</td>
+                    </tr>
+                    <tr style="background-color: var(--bg-app);">
+                        <td style="padding: 8px; border: 1px solid var(--border-color);"><code>PIS</code></td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">Número do PIS</td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">123.45678.90-0</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);"><code>CPF</code></td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">Número do CPF</td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">111.222.333-44</td>
+                    </tr>
+                    <tr style="background-color: var(--bg-app);">
+                        <td style="padding: 8px; border: 1px solid var(--border-color);"><code>Setor</code></td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">Setor de Trabalho (opcional)
+                        </td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">TI</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);"><code>Secao</code></td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">Seção de Trabalho (opcional)
+                        </td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">Desenvolvimento</td>
+                    </tr>
+                    <tr style="background-color: var(--bg-app);">
+                        <td style="padding: 8px; border: 1px solid var(--border-color);"><code>FI</code></td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">Número F.I.</td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">1</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);"><code>SalarioBase</code></td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">Salário Base em Reais (use
+                            ponto para centavos)</td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">3500.00</td>
+                    </tr>
+                    <tr style="background-color: var(--bg-app);">
+                        <td style="padding: 8px; border: 1px solid var(--border-color);"><code>ReferenciaDias</code>
+                        </td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">Dias Trabalhados</td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">30</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);"><code>Adiantamento</code></td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">Valor de Adiantamento Salarial
+                        </td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">1400.00</td>
+                    </tr>
+                    <tr style="background-color: var(--bg-app);">
+                        <td style="padding: 8px; border: 1px solid var(--border-color);"><code>OutrosDescontos</code>
+                        </td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">Descontos Diversos</td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">0.00</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);"><code>Banco</code></td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">Nome do Banco para Depósito
+                        </td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">Banco do Brasil</td>
+                    </tr>
+                    <tr style="background-color: var(--bg-app);">
+                        <td style="padding: 8px; border: 1px solid var(--border-color);"><code>Agencia</code></td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">Agência Bancária</td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">1234</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);"><code>Conta</code></td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">Conta Bancária</td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">56789-0</td>
+                    </tr>
+                    <tr style="background-color: var(--bg-app);">
+                        <td style="padding: 8px; border: 1px solid var(--border-color);"><code>Mes</code></td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">Mês por Extenso</td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">Janeiro</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);"><code>Ano</code></td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">Ano de Referência</td>
+                        <td style="padding: 8px; border: 1px solid var(--border-color);">2026</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>3. Carregamento e Execução no Sistema</h3>
+            <ul class="guide-list">
+                <li>No sistema principal, clique em <strong>"Carregar Planilha (.csv, .xlsx)"</strong> e escolha o seu
+                    arquivo salvo.</li>
+                <li>O sistema exibirá a notificação verde <code>✓ X funcionário(s) carregado(s) da planilha.</code></li>
+                <li><strong>Geração na Tela / Impressão:</strong> Clique em <em>"Gerar Holerites da Planilha"</em> para
+                    visualizar todos os holerites de uma só vez e abrir o menu de impressão.</li>
+                <li><strong>Baixar PDFs Individuais Separados (.zip):</strong> Clique em <em>"Baixar PDFs Separados
+                        (.zip)"</em> para que o sistema gere automaticamente um arquivo PDF exclusivo para cada pessoa
+                    (ex: <code>Holerite_1_Joao_da_Silva_Janeiro_2026.pdf</code>) e entregue todos compactados em um
+                    único download <code>.zip</code>.</li>
+            </ul>
+        </section>
+
+        <!-- Passo 4: Impressão e Exportação em PDF -->
+        <section class="guide-section">
+            <h2><span class="badge-step">Passo 4</span> Impressão e Exportação em PDF</h2>
+            <p>O sistema oferece opções flexíveis de saída e geração de documentos:</p>
+            <ul class="guide-list">
+                <li><strong>Imprimir Mês Selecionado:</strong> Envia o holerite da tela atual diretamente para a
+                    impressora ou salvamento em PDF nativo do navegador.</li>
+                <li><strong>Imprimir Lote (12 Meses):</strong> Gera uma sequência automática de 12 meses a partir da
+                    data informada para o mesmo funcionário.</li>
+                <li><strong>Baixar PDFs Separados (.zip):</strong> Na importação por planilha, este botão cria um PDF
+                    individual para cada colaborador e compacta todos os arquivos em um único arquivo <code>.zip</code>
+                    para download rápido.</li>
+            </ul>
+            <div class="info-box">
+                📄 <strong>Vias Duplas:</strong> Cada folha A4 gerada contém automaticamente 2 vias idênticas (Via 1:
+                Empresa com campo de assinatura e Via 2: Funcionário).
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="guide-footer">
+            <p>Gerador de Recibo de Contracheque (Holerite) — Sistema de Gestão Fiscal & Trabalhista</p>
+        </footer>
+    </div>
+</body>
+
+</html>

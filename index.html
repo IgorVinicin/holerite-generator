@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Recibo de Contracheque (Holerite)</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Fontes do Google Fonts para estilo do painel -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <!-- SheetJS para processamento de planilhas Excel e CSV -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <!-- html2pdf para conversão de HTML para PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- JSZip para empacotar múltiplos PDFs individuais em um arquivo ZIP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Painel de Controle (Barra Lateral) -->
+        <aside class="control-panel">
+            <header class="panel-header">
+                <h2>Configurações do Holerite</h2>
+                <p>Personalize os dados e gere o documento</p>
+                <a href="auxiliar.html" class="btn btn-outline" style="margin-top: 10px; text-decoration: none; display: inline-flex; width: 100%; align-items: center; justify-content: center; gap: 6px;">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    Guia de Uso / Como Usar
+                </a>
+            </header>
+
+            <div class="panel-scroll">
+                <!-- Seção de Período e Impressão -->
+                <section class="panel-section">
+                    <h3>Período e Impressão</h3>
+                    <div class="form-row">
+                        <div class="form-group col-7">
+                            <label for="select-month">Mês de Referência</label>
+                            <select id="select-month" class="form-control">
+                                <option value="" selected disabled hidden>Selecione</option>
+                                <option value="Janeiro">Janeiro</option>
+                                <option value="Fevereiro">Fevereiro</option>
+                                <option value="Março">Março</option>
+                                <option value="Abril">Abril</option>
+                                <option value="Maio">Maio</option>
+                                <option value="Junho">Junho</option>
+                                <option value="Julho">Julho</option>
+                                <option value="Agosto">Agosto</option>
+                                <option value="Setembro">Setembro</option>
+                                <option value="Outubro">Outubro</option>
+                                <option value="Novembro">Novembro</option>
+                                <option value="Dezembro">Dezembro</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-5">
+                            <label for="select-year">Ano</label>
+                            <input type="number" id="select-year" class="form-control" placeholder="Ex: 2026" min="1900"
+                                max="2100" value="">
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        <button id="btn-print-current" class="btn btn-primary">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
+                                </path>
+                            </svg>
+                            Imprimir Mês Selecionado
+                        </button>
+
+                        <button id="btn-print-all" class="btn btn-secondary">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                </path>
+                            </svg>
+                            Imprimir Lote (12 Meses)
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Seção de Importação por Planilha -->
+                <section class="panel-section">
+                    <h3>Importação por Planilha</h3>
+                    <div class="form-group">
+                        <label for="input-excel-file">Carregar Planilha (.csv, .xlsx)</label>
+                        <input type="file" id="input-excel-file" class="form-control" accept=".csv, .xlsx, .xls">
+                    </div>
+                    <div class="button-group">
+                        <button id="btn-download-template" class="btn btn-outline" type="button">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                            </svg>
+                            Baixar Modelo (.csv)
+                        </button>
+                        <button id="btn-generate-excel-batch" class="btn btn-primary hidden" type="button">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
+                                </path>
+                            </svg>
+                            <span id="btn-generate-excel-text">Gerar Holerites da Planilha</span>
+                        </button>
+                        <button id="btn-export-excel-zip" class="btn btn-secondary hidden" type="button">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                            </svg>
+                            Baixar PDFs Separados (.zip)
+                        </button>
+                    </div>
+                    <div id="excel-status" class="status-badge hidden"></div>
+                </section>
+
+                <!-- Dados da Empresa -->
+                <section class="panel-section">
+                    <h3>Dados da Empresa</h3>
+                    <div class="form-group">
+                        <label for="company-name">Razão Social</label>
+                        <input type="text" id="company-name" class="form-control" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="company-address">Endereço</label>
+                        <input type="text" id="company-address" class="form-control" value="">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="company-cnpj">CNPJ</label>
+                            <input type="text" id="company-cnpj" class="form-control" value="">
+                        </div>
+                        <div class="form-group col">
+                            <label for="company-code">Código Empresa</label>
+                            <input type="text" id="company-code" class="form-control" value="">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Dados do Funcionário -->
+                <section class="panel-section">
+                    <h3>Dados do Funcionário</h3>
+                    <div class="form-row">
+                        <div class="form-group col-3">
+                            <label for="emp-code">Cód.</label>
+                            <input type="text" id="emp-code" class="form-control" value="">
+                        </div>
+                        <div class="form-group col-9">
+                            <label for="emp-name">Nome Completo</label>
+                            <input type="text" id="emp-name" class="form-control" value="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="emp-role">Cargo</label>
+                        <input type="text" id="emp-role" class="form-control" value="">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="emp-pis">PIS</label>
+                            <input type="text" id="emp-pis" class="form-control" value="">
+                        </div>
+                        <div class="form-group col">
+                            <label for="emp-cpf">CPF</label>
+                            <input type="text" id="emp-cpf" class="form-control" value="">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="emp-setor">Setor</label>
+                            <input type="text" id="emp-setor" class="form-control" value="">
+                        </div>
+                        <div class="form-group col">
+                            <label for="emp-secao">Seção</label>
+                            <input type="text" id="emp-secao" class="form-control" value="">
+                        </div>
+                        <div class="form-group col">
+                            <label for="emp-fi">F.I.</label>
+                            <input type="text" id="emp-fi" class="form-control" value="">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Valores e Folha -->
+                <section class="panel-section">
+                    <h3>Valores e Folha</h3>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="salary-base">Salário Base (R$)</label>
+                            <input type="number" id="salary-base" class="form-control" value="" step="0.01">
+                        </div>
+                        <div class="form-group col">
+                            <label for="salary-ref">Referência Dias</label>
+                            <input type="number" id="salary-ref" class="form-control" value="" step="0.01">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="advance-value">Adiantamento (R$)</label>
+                            <input type="number" id="advance-value" class="form-control" value="" step="0.01">
+                        </div>
+                        <div class="form-group col">
+                            <label for="custom-discount">Outro Desconto (R$)</label>
+                            <input type="number" id="custom-discount" class="form-control" value="" step="0.01">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="bank-name">Banco</label>
+                            <input type="text" id="bank-name" class="form-control" value="">
+                        </div>
+                        <div class="form-group col">
+                            <label for="bank-ag">Agência</label>
+                            <input type="text" id="bank-ag" class="form-control" value="">
+                        </div>
+                        <div class="form-group col">
+                            <label for="bank-cc">Conta</label>
+                            <input type="text" id="bank-cc" class="form-control" value="">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Configurações de Cálculos -->
+                <section class="panel-section">
+                    <h3>Configurações de Cálculos</h3>
+                    <div class="form-group check-group">
+                        <input type="checkbox" id="calc-auto" checked>
+                        <label for="calc-auto">Calcular INSS e IRRF automaticamente (Tabela 2025/2026)</label>
+                    </div>
+                    <div id="manual-tax-inputs" class="hidden">
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <label for="manual-inss">Valor INSS (R$)</label>
+                                <input type="number" id="manual-inss" class="form-control" value="" step="0.01">
+                            </div>
+                            <div class="form-group col">
+                                <label for="manual-irrf">Valor IRRF (R$)</label>
+                                <input type="number" id="manual-irrf" class="form-control" value="" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </aside>
+
+        <!-- Área de Visualização -->
+        <main class="preview-area">
+            <div class="preview-header">
+                <h2>Visualização do Recibo</h2>
+                <div class="theme-toggle">
+                    <button id="btn-theme-toggle" class="btn btn-icon">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Container de páginas de holerite -->
+            <div id="holerite-pages-container" class="holerite-pages-container">
+                <!-- Renderizado dinamicamente por script.js -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Modelo para uma página contendo 2 vias do recibo -->
+    <template id="holerite-page-template">
+        <div class="print-page">
+            <!-- Via 1: Empresa -->
+            <div class="holerite-card copy-employer">
+                <div class="holerite-main-body">
+                    <!-- Cabeçalho: Empresa e Tipo de Recibo -->
+                    <div class="h-header">
+                        <div class="h-company-details">
+                            <div class="h-company-name bold text-upper" data-field="company-name"></div>
+                            <div class="h-company-address text-upper" data-field="company-address"></div>
+                            <div class="h-company-cnpj">CNPJ: <span data-field="company-cnpj"></span></div>
+                        </div>
+                        <div class="h-receipt-title">
+                            <div class="title-main bold">Recibo de contracheque</div>
+                            <div class="title-sub">Empresa: <span data-field="company-code"></span></div>
+                        </div>
+                    </div>
+
+                    <!-- Dados do Funcionário -->
+                    <div class="h-employee-info">
+                        <div class="info-cell col-code">
+                            <span class="label">Código</span>
+                            <span class="val bold" data-field="emp-code"></span>
+                        </div>
+                        <div class="info-cell col-name">
+                            <span class="label">Nome do Funcionário</span>
+                            <span class="val bold text-upper" data-field="emp-name"></span>
+                        </div>
+                        <div class="info-cell col-role">
+                            <span class="label">Cargo</span>
+                            <span class="val text-upper" data-field="emp-role"></span>
+                        </div>
+                        <div class="info-cell col-setor">
+                            <span class="label">Setor</span>
+                            <span class="val" data-field="emp-setor">&nbsp;</span>
+                        </div>
+                        <div class="info-cell col-secao">
+                            <span class="label">Seção</span>
+                            <span class="val" data-field="emp-secao">&nbsp;</span>
+                        </div>
+                        <div class="info-cell col-fi">
+                            <span class="label">F.I.</span>
+                            <span class="val" data-field="emp-fi"></span>
+                        </div>
+                        <div class="info-cell col-pis">
+                            <span class="label">PIS</span>
+                            <span class="val" data-field="emp-pis"></span>
+                        </div>
+                    </div>
+
+                    <!-- Tabela de Lançamentos (Vencimentos / Descontos) -->
+                    <table class="h-table">
+                        <thead>
+                            <tr>
+                                <th class="col-cod">Cód.</th>
+                                <th class="col-descricao">Descrição</th>
+                                <th class="col-ref">Referência</th>
+                                <th class="col-venc text-right">Vencimentos</th>
+                                <th class="col-desconto text-right">Descontos</th>
+                            </tr>
+                        </thead>
+                        <tbody class="h-table-body">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+
+                    <!-- Resumo Financeiro e Dados Bancários -->
+                    <div class="h-summary-row">
+                        <div class="summary-meta">
+                            <div class="meta-date bold" data-field="month-year"></div>
+                            <div class="meta-obs">(*)Última alíquota da tabela progressiva Portaria SPREV/ME nº3.659
+                            </div>
+                        </div>
+                        <div class="summary-bank">
+                            <div class="bank-row">
+                                <span class="bold">CPF:</span> <span data-field="emp-cpf"></span>
+                            </div>
+                            <div class="bank-row">
+                                <span>Banco:</span> <span data-field="bank-name"></span>
+                                <span>Ag.:</span> <span data-field="bank-ag"></span>
+                            </div>
+                            <div class="bank-row">
+                                <span>Conta:</span> <span data-field="bank-cc"></span>
+                            </div>
+                        </div>
+                        <div class="summary-totals">
+                            <div class="total-box">
+                                <span class="label text-center">Total de Vencimentos</span>
+                                <span class="val text-right bold" data-field="total-venc"></span>
+                            </div>
+                            <div class="total-box">
+                                <span class="label text-center">Total de Descontos</span>
+                                <span class="val text-right bold" data-field="total-desc"></span>
+                            </div>
+                            <div class="liquid-box">
+                                <span class="label">Valor Líquido</span>
+                                <div class="liquid-value-wrapper">
+                                    <div class="arrow-indicator">
+                                        <svg viewBox="0 0 24 10" width="30" height="12">
+                                            <path d="M 0,3 L 18,3 L 18,0 L 24,5 L 18,10 L 18,7 L 0,7 Z" fill="#888" />
+                                        </svg>
+                                    </div>
+                                    <span class="val bold" data-field="liquid-value"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bases de Cálculo no Rodapé -->
+                    <div class="h-footer-bases">
+                        <div class="base-cell">
+                            <span class="label">Salário Base</span>
+                            <span class="val" data-field="base-salary"></span>
+                        </div>
+                        <div class="base-cell">
+                            <span class="label">Sal. Contr. INSS</span>
+                            <span class="val" data-field="base-inss"></span>
+                        </div>
+                        <div class="base-cell">
+                            <span class="label">Base Calc. FGTS</span>
+                            <span class="val" data-field="base-fgts"></span>
+                        </div>
+                        <div class="base-cell">
+                            <span class="label">FGTS do Mês</span>
+                            <span class="val" data-field="fgts-month"></span>
+                        </div>
+                        <div class="base-cell">
+                            <span class="label">Base Calc. IRRF</span>
+                            <span class="val" data-field="base-irrf"></span>
+                        </div>
+                        <div class="base-cell">
+                            <span class="label">Faixa IRRF</span>
+                            <span class="val text-center" data-field="faixa-irrf"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Barra lateral: Declaração e Assinatura -->
+                <div class="holerite-receipt-sidebar">
+                    <div class="vertical-text">
+                        Declaro ter recebido a importância líquida discriminada neste recibo
+                    </div>
+                    <div class="sidebar-signature">
+                        <div class="signature-line"></div>
+                        <span class="label">Assinatura do Funcionário</span>
+                    </div>
+                    <div class="sidebar-date">
+                        <div class="date-lines">
+                            <div class="line-day"></div>
+                            <span class="slash">/</span>
+                            <div class="line-month"></div>
+                            <span class="slash">/</span>
+                            <div class="line-year"></div>
+                        </div>
+                        <span class="label text-center">Data</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Linha pontilhada de corte entre as vias -->
+            <div class="print-separation-line"></div>
+
+            <!-- Via 2: Funcionário (Espelho da Via 1) -->
+            <div class="holerite-card copy-employee">
+                <div class="holerite-main-body">
+                    <!-- Cabeçalho: Empresa e Tipo de Recibo -->
+                    <div class="h-header">
+                        <div class="h-company-details">
+                            <div class="h-company-name bold text-upper" data-field="company-name"></div>
+                            <div class="h-company-address text-upper" data-field="company-address"></div>
+                            <div class="h-company-cnpj">CNPJ: <span data-field="company-cnpj"></span></div>
+                        </div>
+                        <div class="h-receipt-title">
+                            <div class="title-main bold">Recibo de contracheque</div>
+                            <div class="title-sub">Empresa: <span data-field="company-code"></span></div>
+                        </div>
+                    </div>
+
+                    <!-- Dados do Funcionário -->
+                    <div class="h-employee-info">
+                        <div class="info-cell col-code">
+                            <span class="label">Código</span>
+                            <span class="val bold" data-field="emp-code"></span>
+                        </div>
+                        <div class="info-cell col-name">
+                            <span class="label">Nome do Funcionário</span>
+                            <span class="val bold text-upper" data-field="emp-name"></span>
+                        </div>
+                        <div class="info-cell col-role">
+                            <span class="label">Cargo</span>
+                            <span class="val text-upper" data-field="emp-role"></span>
+                        </div>
+                        <div class="info-cell col-setor">
+                            <span class="label">Setor</span>
+                            <span class="val" data-field="emp-setor">&nbsp;</span>
+                        </div>
+                        <div class="info-cell col-secao">
+                            <span class="label">Seção</span>
+                            <span class="val" data-field="emp-secao">&nbsp;</span>
+                        </div>
+                        <div class="info-cell col-fi">
+                            <span class="label">F.I.</span>
+                            <span class="val" data-field="emp-fi"></span>
+                        </div>
+                        <div class="info-cell col-pis">
+                            <span class="label">PIS</span>
+                            <span class="val" data-field="emp-pis"></span>
+                        </div>
+                    </div>
+
+                    <!-- Tabela de Lançamentos (Vencimentos / Descontos) -->
+                    <table class="h-table">
+                        <thead>
+                            <tr>
+                                <th class="col-cod">Cód.</th>
+                                <th class="col-descricao">Descrição</th>
+                                <th class="col-ref">Referência</th>
+                                <th class="col-venc text-right">Vencimentos</th>
+                                <th class="col-desconto text-right">Descontos</th>
+                            </tr>
+                        </thead>
+                        <tbody class="h-table-body">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+
+                    <!-- Resumo Financeiro e Dados Bancários -->
+                    <div class="h-summary-row">
+                        <div class="summary-meta">
+                            <div class="meta-date bold" data-field="month-year"></div>
+                            <div class="meta-obs">(*)Última alíquota da tabela progressiva Portaria SPREV/ME nº3.659
+                            </div>
+                        </div>
+                        <div class="summary-bank">
+                            <div class="bank-row">
+                                <span class="bold">CPF:</span> <span data-field="emp-cpf"></span>
+                            </div>
+                            <div class="bank-row">
+                                <span>Banco:</span> <span data-field="bank-name"></span>
+                                <span>Ag.:</span> <span data-field="bank-ag"></span>
+                            </div>
+                            <div class="bank-row">
+                                <span>Conta:</span> <span data-field="bank-cc"></span>
+                            </div>
+                        </div>
+                        <div class="summary-totals">
+                            <div class="total-box">
+                                <span class="label text-center">Total de Vencimentos</span>
+                                <span class="val text-right bold" data-field="total-venc"></span>
+                            </div>
+                            <div class="total-box">
+                                <span class="label text-center">Total de Descontos</span>
+                                <span class="val text-right bold" data-field="total-desc"></span>
+                            </div>
+                            <div class="liquid-box">
+                                <span class="label">Valor Líquido</span>
+                                <div class="liquid-value-wrapper">
+                                    <div class="arrow-indicator">
+                                        <svg viewBox="0 0 24 10" width="30" height="12">
+                                            <path d="M 0,3 L 18,3 L 18,0 L 24,5 L 18,10 L 18,7 L 0,7 Z" fill="#888" />
+                                        </svg>
+                                    </div>
+                                    <span class="val bold" data-field="liquid-value"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bases de Cálculo no Rodapé -->
+                    <div class="h-footer-bases">
+                        <div class="base-cell">
+                            <span class="label">Salário Base</span>
+                            <span class="val" data-field="base-salary"></span>
+                        </div>
+                        <div class="base-cell">
+                            <span class="label">Sal. Contr. INSS</span>
+                            <span class="val" data-field="base-inss"></span>
+                        </div>
+                        <div class="base-cell">
+                            <span class="label">Base Calc. FGTS</span>
+                            <span class="val" data-field="base-fgts"></span>
+                        </div>
+                        <div class="base-cell">
+                            <span class="label">FGTS do Mês</span>
+                            <span class="val" data-field="fgts-month"></span>
+                        </div>
+                        <div class="base-cell">
+                            <span class="label">Base Calc. IRRF</span>
+                            <span class="val" data-field="base-irrf"></span>
+                        </div>
+                        <div class="base-cell">
+                            <span class="label">Faixa IRRF</span>
+                            <span class="val text-center" data-field="faixa-irrf"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Barra lateral: Declaração e Assinatura -->
+                <div class="holerite-receipt-sidebar">
+                    <div class="vertical-text">
+                        Declaro ter recebido a importância líquida discriminada neste recibo
+                    </div>
+                    <div class="sidebar-signature">
+                        <div class="signature-line"></div>
+                        <span class="label">Assinatura do Funcionário</span>
+                    </div>
+                    <div class="sidebar-date">
+                        <div class="date-lines">
+                            <div class="line-day"></div>
+                            <span class="slash">/</span>
+                            <div class="line-month"></div>
+                            <span class="slash">/</span>
+                            <div class="line-year"></div>
+                        </div>
+                        <span class="label text-center">Data</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
