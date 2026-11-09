@@ -41,4 +41,80 @@ O projeto foi desenvolvido com foco na simplificação de processos administrati
 |---|---|
 | HTML5 | Estrutura da aplicação |
 | CSS3 | Estilização e layout responsivo |
-| Java
+| JavaScript | Regras de negócio e manipulação dinâmica da interface |
+| SheetJS | Leitura e processamento de arquivos CSV e Excel |
+| html2pdf.js | Conversão de documentos HTML para PDF |
+| jsPDF | Geração de documentos PDF |
+| JSZip | Compactação de múltiplos arquivos PDF |
+
+## Arquitetura e organização
+
+A aplicação utiliza uma arquitetura frontend estática, sem necessidade de backend ou banco de dados para seu funcionamento atual.
+
+A lógica de negócio é executada no navegador, com manipulação do DOM para atualizar os demonstrativos conforme as informações fornecidas pelo usuário.
+
+### Estrutura do projeto
+
+```text
+holerite-generator/
+├── index.html      # Interface principal e estrutura do holerite
+├── auxiliar.html   # Guia de utilização
+├── script.js       # Regras de negócio, cálculos e exportações
+└── style.css       # Estilização e responsividade
+```
+
+## Executando o projeto
+
+### Pré-requisitos
+
+- Navegador web atualizado.
+- Conexão com a internet para carregamento das bibliotecas externas via CDN.
+
+### Instalação
+
+Clone o repositório:
+
+```bash
+git clone https://github.com/IgorVinicin/holerite-generator.git
+
+cd holerite-generator
+```
+
+### Execução
+
+Abra o arquivo `index.html` diretamente no navegador ou utilize uma extensão de servidor local, como o Live Server do Visual Studio Code.
+
+Não é necessário instalar dependências via npm ou configurar um banco de dados.
+
+## Importação de dados
+
+A aplicação disponibiliza um modelo CSV para padronizar a importação de informações.
+
+Entre os campos contemplados estão:
+
+- Dados cadastrais da empresa.
+- Identificação dos funcionários.
+- Informações salariais e contratuais.
+- Dados bancários.
+- Período de referência.
+- Adiantamentos e descontos adicionais.
+
+A leitura das planilhas é realizada no próprio navegador utilizando SheetJS.
+
+## Considerações técnicas
+
+Os cálculos tributários implementados utilizam faixas e parâmetros definidos diretamente no código-fonte. Portanto, os valores devem ser revisados e atualizados conforme a legislação vigente antes de qualquer utilização em processos reais de folha de pagamento.
+
+A aplicação é uma ferramenta de geração de demonstrativos e não substitui um sistema oficial de processamento de folha de pagamento.
+
+## Objetivo técnico
+
+O desenvolvimento deste projeto permitiu aplicar conceitos de JavaScript, manipulação dinâmica do DOM, processamento de arquivos tabulares, implementação de regras de negócio financeiras e geração automatizada de documentos.
+
+Também foram exploradas estratégias de processamento em lote para reduzir tarefas repetitivas em rotinas administrativas.
+
+## Autor
+
+**Igor Vinicius**
+
+[GitHub](https://github.com/IgorVinicin)
