@@ -1,0 +1,44 @@
+# Holerite Generator
+
+Aplicação web desenvolvida para geração e gerenciamento de demonstrativos de pagamento (holerites), com suporte à inserção manual de informações, cálculo de encargos trabalhistas, importação de planilhas e exportação de documentos em PDF.
+
+O projeto foi desenvolvido com foco na simplificação de processos administrativos e na automatização da emissão de holerites, permitindo tanto a geração individual quanto o processamento de múltiplos funcionários.
+
+## Funcionalidades
+
+### Cadastro e configuração
+- Cadastro de informações da empresa, incluindo razão social, endereço, CNPJ e código empresarial.
+- Cadastro de dados dos funcionários.
+- Configuração de informações contratuais, bancárias e salariais.
+- Seleção de mês e ano de referência.
+- Personalização de proventos e descontos.
+
+### Cálculos financeiros
+- Cálculo automático de INSS por faixas progressivas.
+- Cálculo de IRRF com base nas faixas configuradas.
+- Opção de preenchimento manual dos valores de encargos.
+- Cálculo de proventos e descontos.
+- Consolidação dos valores brutos e líquidos.
+- Apresentação das bases de cálculo de INSS, IRRF e FGTS.
+
+### Geração de documentos
+- Pré-visualização dinâmica dos holerites.
+- Geração de duas vias: empresa e funcionário.
+- Exportação individual em PDF.
+- Impressão do demonstrativo.
+- Geração de documentos para os 12 meses do ano.
+
+### Processamento em lote
+- Importação de arquivos CSV e Excel.
+- Disponibilização de modelo CSV para preenchimento padronizado.
+- Processamento de múltiplos funcionários.
+- Geração individual de PDFs para cada funcionário.
+- Compactação dos documentos gerados em arquivo ZIP.
+
+## Tecnologias utilizadas
+
+| Tecnologia | Aplicação |
+|---|---|
+| HTML5 | Estrutura da aplicação |
+| CSS3 | Estilização e layout responsivo |
+| Java
